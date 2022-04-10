@@ -41,12 +41,12 @@ travelsController.getAll = async (req, res) => {
 
 // Insert a new travels in database
 travelsController.create = async (req, res) => {
-  const { codigo, nro_plazas, destino, origen, precio } = req.body;
+  const { cod_viaje, nro_plazas, destino, origen, precio } = req.body;
 
   try {
     dbConnection.query(
       "INSERT INTO viajes (cod_viaje, nro_plazas, destino, origen, precio) VALUES (?, ?, ?, ?,?)",
-      [codigo, nro_plazas, destino, origen, precio],
+      [cod_viaje, nro_plazas, destino, origen, precio],
       async (err, result) => {
         if (err) {
           return res.status(400).json({
@@ -62,7 +62,7 @@ travelsController.create = async (req, res) => {
           count: 1,
           data: {
             id: result.insertId,
-            codigo,
+            cod_viaje,
             nro_plazas,
             destino,
             origen,
@@ -83,12 +83,11 @@ travelsController.create = async (req, res) => {
 
 // Update travels in database
 travelsController.update = async (req, res) => {
-  const { id, codigo, nro_plazas, destino, origen, precio } = req.body;
-
+  const { id, cod_viaje, nro_plazas, destino, origen, precio } = req.body;
   try {
     dbConnection.query(
       "UPDATE viajes SET cod_viaje=?, nro_plazas=?, destino=?, origen=?, precio=? WHERE id=?",
-      [codigo, nro_plazas, destino, origen, precio, id],
+      [cod_viaje, nro_plazas, destino, origen, precio, id],
       async (err, result) => {
         if (err) {
           return res.status(400).json({

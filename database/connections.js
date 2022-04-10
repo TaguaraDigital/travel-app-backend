@@ -27,7 +27,7 @@ if (process.env.DBDEV === "LOCAL") {
 
 // Conexion al servidor de mysql en clever cloud emall user taguaradigital
 if (process.env.DBDEV === "TAGUARA") {
-  console.log(`BD CLEVER CLOUD USER ${process.env.CLEVER_CLOUD_TG}`);
+  console.log(`BD USER ${process.env.CLEVER_CLOUD_TRAVEL_APP}`);
   dbConnection = mysql.createConnection({
     connectionLimit: 5,
     host: process.env.RDBHOST,
