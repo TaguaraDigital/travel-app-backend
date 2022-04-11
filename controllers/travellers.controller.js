@@ -131,4 +131,62 @@ travellersController.byId = async (req, res) => {
   }
 };
 
+travellersController.create = async (req, res) => {
+  try {
+    const { viajero, viajes } = req.body;
+    const { cedula, nombre, fecha_nacimiento, telefono } = viajero;
+    let insertedTravelerId;
+    let values = [];
+
+    dbConnection.query(
+      "INSERT INTO viajeros(cedula, nombre, fecha_nacimiento, telefono) VALUES (?,?,?,?)",
+      [cedula, nombre, fecha_nacimiento, telefono],
+
+      async (err, result) => {
+        if (err) {
+          return res.status(400).json({
+            status: 400,
+            success: false,
+            message: "Error =" + err,
+          });
+        } else {
+          insertedTravelerId = result.insertId;
+          viajes.forEach((viaje) => {
+            values.push([insertedTravelerId, viaje.id]);
+          });
+          dbConnection.query(
+            "INSERT INTO tickets (viajero_id, viaje_id) VALUES ?",
+            [values],
+            async (err, result) => {
+              if (err) {
+                return res.status(400).json({
+                  status: 400,
+                  success: false,
+                  message: "Error =" + err,
+                });
+              }
+
+              res.status(200).json({
+                status: 200,
+                id: insertedTravelerId,
+                success: true,
+                message: "ok",
+              });
+            }
+          );
+
+          console.log("en el paso 5");
+        }
+      }
+    );
+  } catch (error) {
+    console.log("en el paso 6");
+    res.status(500).json({
+      status: 500,
+      success: false,
+      message: "Server Error en travellersController",
+    });
+  }
+};
+
 module.exports = travellersController;

@@ -9,7 +9,7 @@ router.get("/", travellersController.getAllTravellers);
 router.get("/:cedula", travellersController.byId);
 
 // Create a traveller
-// router.post("/", travellersController.create);
+router.post("/", travellersController.create);
 
 // Update a traveller
 // router.put("/", travellersController.update);
