@@ -189,4 +189,35 @@ travellersController.create = async (req, res) => {
   }
 };
 
+// delete travels in database
+travellersController.delete = async (req, res) => {
+  try {
+    dbConnection.query(
+      "DELETE FROM viajeros WHERE id=?",
+      [req.params.id],
+      async (err, result) => {
+        if (err) {
+          return res.status(400).json({
+            status: 400,
+            success: false,
+            message: "Error =" + err,
+          });
+        }
+
+        res.status(200).json({
+          status: 200,
+          success: true,
+          message: "ok",
+        });
+      }
+    );
+  } catch (error) {
+    res.status(500).json({
+      status: 500,
+      success: false,
+      message: "Server Error en travelsController",
+    });
+  }
+};
+
 module.exports = travellersController;

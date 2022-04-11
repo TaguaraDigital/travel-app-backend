@@ -15,6 +15,6 @@ router.post("/", travellersController.create);
 // router.put("/", travellersController.update);
 
 // Delete a traveller
-// router.delete("/", travellersController.update);
+router.delete("/", travellersController.delete);
 
 module.exports = router;
