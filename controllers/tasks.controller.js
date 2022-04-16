@@ -1,7 +1,46 @@
 const connect = require("../database/con2");
-// const dbConnection = require("../database/connections");
+const dbConnection = require("../database/connections");
 
 const tasksController = {};
+/*
+// Get all travels in database
+tasksController.getAll = async (req, res) => {
+  try {
+    dbConnection.query("SELECT * FROM tasks", async (err, result) => {
+      if (err) {
+        return res.status(400).json({
+          status: 400,
+          success: false,
+          message: "Error =" + err,
+        });
+      }
+
+      if (result.length === 0) {
+        return res.status(400).json({
+          status: 400,
+          success: false,
+          msg: "No hay tareas",
+        });
+      }
+
+      res.status(200).json({
+        status: 200,
+        success: true,
+        data: result,
+        count: result.length,
+        message: "ok",
+      });
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 500,
+      success: false,
+      message: "Server Error en travelsController",
+    });
+  }
+};
+
+*/
 
 // Get all tasks in database
 tasksController.getAll = async (req, res) => {
@@ -32,6 +71,37 @@ tasksController.getAll = async (req, res) => {
   }
 };
 
+// Get tasks by Id
+tasksController.getById = async (req, res) => {
+  try {
+    const db = await connect();
+    const [rows] = await db.query("SELECT * FROM tasks WHERE id = ?", [
+      req.params.id,
+    ]);
+
+    if (rows.length === 0) {
+      return res.status(401).json({
+        status: 401,
+        success: false,
+        message: "No hay tareas",
+      });
+    }
+
+    res.status(200).json({
+      status: 200,
+      success: true,
+      message: "ok",
+      data: rows,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 500,
+      success: false,
+      message: "Server Error en tasks Controller",
+    });
+  }
+};
+
 // Insert a new tasks in database
 tasksController.create = async (req, res) => {
   const { title, description, status } = req.body;
@@ -45,8 +115,11 @@ tasksController.create = async (req, res) => {
     res.status(200).json({
       status: 200,
       success: true,
-      count: 1,
-      result: rows,
+      count: rows.affectedRows,
+      data: {
+        ...req.body,
+        id: rows.insertId,
+      },
       message: "ok",
     });
   } catch (error) {
@@ -72,7 +145,8 @@ tasksController.update = async (req, res) => {
     res.status(200).json({
       status: 200,
       success: true,
-      data: rows,
+      data: req.body,
+      count: rows.affectedRows,
       message: "ok",
     });
   } catch (error) {
@@ -98,6 +172,7 @@ tasksController.delete = async (req, res) => {
       status: 200,
       success: true,
       message: "ok",
+      count: rows.affectedRows,
     });
   } catch (error) {
     res.status(500).json({
