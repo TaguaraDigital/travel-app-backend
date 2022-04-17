@@ -2,45 +2,6 @@ const connect = require("../database/con2");
 const dbConnection = require("../database/connections");
 
 const tasksController = {};
-/*
-// Get all travels in database
-tasksController.getAll = async (req, res) => {
-  try {
-    dbConnection.query("SELECT * FROM tasks", async (err, result) => {
-      if (err) {
-        return res.status(400).json({
-          status: 400,
-          success: false,
-          message: "Error =" + err,
-        });
-      }
-
-      if (result.length === 0) {
-        return res.status(400).json({
-          status: 400,
-          success: false,
-          msg: "No hay tareas",
-        });
-      }
-
-      res.status(200).json({
-        status: 200,
-        success: true,
-        data: result,
-        count: result.length,
-        message: "ok",
-      });
-    });
-  } catch (error) {
-    res.status(500).json({
-      status: 500,
-      success: false,
-      message: "Server Error en travelsController",
-    });
-  }
-};
-
-*/
 
 // Get all tasks in database
 tasksController.getAll = async (req, res) => {
@@ -55,7 +16,9 @@ tasksController.getAll = async (req, res) => {
         message: "No hay tareas",
       });
     }
-    console.log("probando");
+
+    db.end();
+
     res.status(200).json({
       status: 200,
       success: true,
@@ -87,6 +50,7 @@ tasksController.getById = async (req, res) => {
       });
     }
 
+    db.end();
     res.status(200).json({
       status: 200,
       success: true,
@@ -122,6 +86,7 @@ tasksController.create = async (req, res) => {
       },
       message: "ok",
     });
+    db.end();
   } catch (error) {
     res.status(500).json({
       status: 500,
@@ -149,6 +114,7 @@ tasksController.update = async (req, res) => {
       count: rows.affectedRows,
       message: "ok",
     });
+    db.end();
   } catch (error) {
     res.status(500).json({
       status: 500,
@@ -174,6 +140,7 @@ tasksController.delete = async (req, res) => {
       message: "ok",
       count: rows.affectedRows,
     });
+    db.end();
   } catch (error) {
     res.status(500).json({
       status: 500,
